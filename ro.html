@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Media Player HTML</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: yellowgreen;
+      color: black;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      margin-left: 180px;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 { color: black; }
+    .links a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+    }
+    select {
+      padding: 8px;
+      margin: 10px;
+      border-radius: 5px;
+      border: 1px solid black;
+    }
+    audio, video {
+      margin-top: 20px;
+      width: 80%;
+      max-width: 600px;
+      border: 2px solid black;
+      border-radius: 10px;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 160px;
+      height: 100%;
+      background-color: yellowgreen;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px;
+      gap: 15px;
+    }
+    .sidebar img {
+      width: 120px;
+      height: auto;
+      border-radius: 12px;
+    }
+    .controls {
+      margin-top: 10px;
+    }
+    .controls button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      background: black;
+      color: yellowgreen;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .controls button:hover {
+      background: darkgreen;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fotos fixas na lateral -->
+  <div class="sidebar">
+ <img src="rose.jpg">
+  </div>
+
+  <div class="container">
+    <h1>🎵🎬 Media Player Super Fun - Rose</h1>
+    <div class="links">
+      <a href="https://www.google.com" target="_blank">🌐 Google</a> |
+      <a href="https://www.youtube.com/" target="_blank">💼 Youtube</a>
+    </div>
+    <br>
+
+    <!-- AUDIO -->
+    <h2>Audio Player (MP3)</h2>
+    <select id="audioSelect">
+      <option value="">-- Escolha uma música --</option>
+      <option value="Y-MP3/ms1.mp3">musica1.mp3</option>
+      <option value="Y-MP3/ms2.mp3">musica2.mp3</option>
+      <option value="Y-MP3/ms3.mp3">musica3.mp3</option>
+      <option value="Y-MP3/ms4.mp3">musica4.mp3</option>
+      <option value="Y-MP3/ms5.mp3">musica5.mp3</option>
+      <option value="Y-MP3/ms6.mp3">musica6.mp3</option>
+      <option value="Y-MP3/ms7.mp3">musica7.mp3</option>
+      <option value="Y-MP3/ms8.mp3">musica8.mp3</option>
+      <option value="Y-MP3/ms9.mp3">musica9.mp3</option>
+
+    </select>
+    <br>
+    <audio id="audioPlayer" controls></audio>
+    <div class="controls">
+      <button onclick="prevAudio()">⏮️ Anterior</button>
+      <button onclick="toggleAudio()">⏯️ Play/Pause</button>
+      <button onclick="nextAudio()">⏭️ Próxima</button>
+    </div>
+
+    <!-- VIDEO -->
+    <h2>Video Player (MP4)</h2>
+    <select id="videoSelect">
+      <option value="">-- Escolha um vídeo --</option>
+      <option value="Y-MP4/video1.mp4">video1.mp4</option>
+      <option value="Y-MP4/video2.mp4">video2.mp4</option>
+      <option value="Y-MP4/video3.mp4">video3.mp4</option>
+      <option value="Y-MP4/video4.mp4">video4.mp4</option>
+      <option value="Y-MP4/video5.mp4">video5.mp4</option>
+      <option value="Y-MP4/video6.mp4">video6.mp4</option>
+      <option value="Y-MP4/video7.mp4">video7.mp4</option>
+      <option value="Y-MP4/video8.mp4">video8.mp4</option>
+      <option value="Y-MP4/video9.mp4">video9.mp4</option>
+    </select>
+    <br>
+    <video id="videoPlayer" controls></video>
+    <div class="controls">
+      <button onclick="prevVideo()">⏮️ Anterior</button>
+      <button onclick="toggleVideo()">⏯️ Play/Pause</button>
+      <button onclick="nextVideo()">⏭️ Próxima</button>
+    </div>
+  </div>
+
+  <script>
+    // ==== AUDIO ====
+    const audioSelect = document.getElementById('audioSelect');
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    audioSelect.addEventListener('change', () => {
+      if (audioSelect.value) {
+        audioPlayer.src = audioSelect.value;
+        audioPlayer.play();
+      }
+    });
+
+    function toggleAudio() {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+      } else {
+        audioPlayer.pause();
+      }
+    }
+
+    function nextAudio() {
+      if (audioSelect.selectedIndex < audioSelect.options.length - 1) {
+        audioSelect.selectedIndex++;
+        audioPlayer.src = audioSelect.value;
+        audioPlayer.play();
+      }
+    }
+
+    function prevAudio() {
+      if (audioSelect.selectedIndex > 1) { // índice 0 é "Escolha..."
+        audioSelect.selectedIndex--;
+        audioPlayer.src = audioSelect.value;
+        audioPlayer.play();
+      }
+    }
+
+    // ==== VIDEO ====
+    const videoSelect = document.getElementById('videoSelect');
+    const videoPlayer = document.getElementById('videoPlayer');
+
+    videoSelect.addEventListener('change', () => {
+      if (videoSelect.value) {
+        videoPlayer.src = videoSelect.value;
+        videoPlayer.play();
+      }
+    });
+
+    function toggleVideo() {
+      if (videoPlayer.paused) {
+        videoPlayer.play();
+      } else {
+        videoPlayer.pause();
+      }
+    }
+
+    function nextVideo() {
+      if (videoSelect.selectedIndex < videoSelect.options.length - 1) {
+        videoSelect.selectedIndex++;
+        videoPlayer.src = videoSelect.value;
+        videoPlayer.play();
+      }
+    }
+
+    function prevVideo() {
+      if (videoSelect.selectedIndex > 1) {
+        videoSelect.selectedIndex--;
+        videoPlayer.src = videoSelect.value;
+        videoPlayer.play();
+      }
+    }
+  </script>
+
+</body>
+</html>
