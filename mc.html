@@ -1,211 +1,190 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Media Player HTML</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: yellowgreen;
-      color: black;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      margin-left: 180px;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 { color: black; }
-    .links a {
-      margin: 0 10px;
-      text-decoration: none;
-      color: black;
-      font-weight: bold;
-    }
-    select {
-      padding: 8px;
-      margin: 10px;
-      border-radius: 5px;
-      border: 1px solid black;
-    }
-    audio, video {
-      margin-top: 20px;
-      width: 80%;
-      max-width: 600px;
-      border: 2px solid black;
-      border-radius: 10px;
-    }
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 160px;
-      height: 100%;
-      background-color: yellowgreen;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 10px;
-      gap: 15px;
-    }
-    .sidebar img {
-      width: 120px;
-      height: auto;
-      border-radius: 12px;
-    }
-    .controls {
-      margin-top: 10px;
-    }
-    .controls button {
-      padding: 10px 15px;
-      margin: 5px;
-      border: none;
-      border-radius: 8px;
-      background: black;
-      color: yellowgreen;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .controls button:hover {
-      background: darkgreen;
-      color: white;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>POLYDEV PLAYER</title>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background: navy;
+  color: yellowgreen;
+}
+
+.sidebar {
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  background: black;
+  padding: 15px;
+}
+
+.sidebar h2 {
+  text-align:center;
+}
+
+.sidebar button {
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  background: yellowgreen;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.container {
+  margin-left:220px;
+  padding:20px;
+  text-align:center;
+}
+
+select {
+  padding:10px;
+  border-radius:8px;
+  margin:10px;
+}
+
+audio, video, iframe {
+  width:80%;
+  max-width:700px;
+  margin-top:20px;
+  border-radius:10px;
+  border:2px solid yellowgreen;
+}
+
+.controls button {
+  padding:10px;
+  margin:5px;
+  background: yellowgreen;
+  border:none;
+  cursor:pointer;
+}
+</style>
+
 </head>
 <body>
 
-  <!-- Fotos fixas na lateral -->
-  <div class="sidebar">
- <img src="cida.jpg">
-  </div>
+<div class="sidebar">
+  <h2>POLYDEV</h2>
 
-  <div class="container">
-    <h1>🎵🎬 Media Player Super Fun</h1>
-    <div class="links">
-      <a href="https://www.google.com" target="_blank">🌐 Google</a> |
-      <a href="https://www.youtube.com/" target="_blank">💼 Youtube</a>
-    </div>
-    <br>
+  <button onclick="loadCategory('python')">🐍 Python</button>
+  <button onclick="loadCategory('sql')">🗄️ SQL</button>
+  <button onclick="loadCategory('media')">🎧 Media</button>
+</div>
 
-    <!-- AUDIO -->
-    <h2>Audio Player (MP3)</h2>
-    <select id="audioSelect">
-      <option value="">-- Escolha uma música --</option>
-      <option value="Y-MP3/ms1.mp3">musica1.mp3</option>
-      <option value="Y-MP3/ms2.mp3">musica2.mp3</option>
-      <option value="Y-MP3/ms3.mp3">musica3.mp3</option>
-      <option value="Y-MP3/ms4.mp3">musica4.mp3</option>
-      <option value="Y-MP3/ms5.mp3">musica5.mp3</option>
-      <option value="Y-MP3/ms6.mp3">musica6.mp3</option>
-      <option value="Y-MP3/ms7.mp3">musica7.mp3</option>
-      <option value="Y-MP3/ms8.mp3">musica8.mp3</option>
-      <option value="Y-MP3/ms9.mp3">musica9.mp3</option>
+<div class="container">
 
-    </select>
-    <br>
-    <audio id="audioPlayer" controls></audio>
-    <div class="controls">
-      <button onclick="prevAudio()">⏮️ Anterior</button>
-      <button onclick="toggleAudio()">⏯️ Play/Pause</button>
-      <button onclick="nextAudio()">⏭️ Próxima</button>
-    </div>
+<h1>🚀 POLYDEV PLAYER</h1>
 
-    <!-- VIDEO -->
-    <h2>Video Player (MP4)</h2>
-    <select id="videoSelect">
-      <option value="">-- Escolha um vídeo --</option>
-      <option value="Y-MP4/video1.mp4">video1.mp4</option>
-      <option value="Y-MP4/video2.mp4">video2.mp4</option>
-      <option value="Y-MP4/video3.mp4">video3.mp4</option>
-      <option value="Y-MP4/video4.mp4">video4.mp4</option>
-      <option value="Y-MP4/video5.mp4">video5.mp4</option>
-      <option value="Y-MP4/video6.mp4">video6.mp4</option>
-      <option value="Y-MP4/video7.mp4">video7.mp4</option>
-      <option value="Y-MP4/video8.mp4">video8.mp4</option>
-      <option value="Y-MP4/video9.mp4">video9.mp4</option>
-    </select>
-    <br>
-    <video id="videoPlayer" controls></video>
-    <div class="controls">
-      <button onclick="prevVideo()">⏮️ Anterior</button>
-      <button onclick="toggleVideo()">⏯️ Play/Pause</button>
-      <button onclick="nextVideo()">⏭️ Próxima</button>
-    </div>
-  </div>
+<!-- AUDIO -->
+<h2>🎧 Áudio</h2>
+<select id="audioSelect"></select>
+<br>
+<audio id="audioPlayer" controls></audio>
 
-  <script>
-    // ==== AUDIO ====
-    const audioSelect = document.getElementById('audioSelect');
-    const audioPlayer = document.getElementById('audioPlayer');
+<div class="controls">
+<button onclick="prevAudio()">⏮️</button>
+<button onclick="toggleAudio()">⏯️</button>
+<button onclick="nextAudio()">⏭️</button>
+</div>
 
-    audioSelect.addEventListener('change', () => {
-      if (audioSelect.value) {
-        audioPlayer.src = audioSelect.value;
-        audioPlayer.play();
-      }
-    });
+<!-- VIDEO LOCAL -->
+<h2>🎬 Vídeo Local</h2>
+<select id="videoSelect"></select>
+<br>
+<video id="videoPlayer" controls></video>
 
-    function toggleAudio() {
-      if (audioPlayer.paused) {
-        audioPlayer.play();
-      } else {
-        audioPlayer.pause();
-      }
-    }
+<!-- YOUTUBE -->
+<h2>🌍 YouTube</h2>
+<select id="ytSelect"></select>
+<br>
+<iframe id="ytPlayer" height="350" allowfullscreen></iframe>
 
-    function nextAudio() {
-      if (audioSelect.selectedIndex < audioSelect.options.length - 1) {
-        audioSelect.selectedIndex++;
-        audioPlayer.src = audioSelect.value;
-        audioPlayer.play();
-      }
-    }
+</div>
 
-    function prevAudio() {
-      if (audioSelect.selectedIndex > 1) { // índice 0 é "Escolha..."
-        audioSelect.selectedIndex--;
-        audioPlayer.src = audioSelect.value;
-        audioPlayer.play();
-      }
-    }
+<script>
 
-    // ==== VIDEO ====
-    const videoSelect = document.getElementById('videoSelect');
-    const videoPlayer = document.getElementById('videoPlayer');
+const data = {
+  python: {
+    audio: ["Y-MP3/ms1.mp3","Y-MP3/ms2.mp3"],
+    video: ["Y-MP4/video1.mp4"],
+    yt: ["https://www.youtube.com/embed/kqtD5dpn9C8"]
+  },
+  sql: {
+    audio: ["Y-MP3/ms3.mp3"],
+    video: ["Y-MP4/video2.mp4"],
+    yt: ["https://www.youtube.com/embed/HXV3zeQKqGY"]
+  },
+  media: {
+    audio: ["Y-MP3/ms4.mp3"],
+    video: ["Y-MP4/video3.mp4"],
+    yt: ["https://www.youtube.com/embed/dQw4w9WgXcQ"]
+  }
+};
 
-    videoSelect.addEventListener('change', () => {
-      if (videoSelect.value) {
-        videoPlayer.src = videoSelect.value;
-        videoPlayer.play();
-      }
-    });
+function loadCategory(cat) {
+  loadSelect("audioSelect", data[cat].audio);
+  loadSelect("videoSelect", data[cat].video);
+  loadSelect("ytSelect", data[cat].yt);
+}
 
-    function toggleVideo() {
-      if (videoPlayer.paused) {
-        videoPlayer.play();
-      } else {
-        videoPlayer.pause();
-      }
-    }
+function loadSelect(id, items) {
+  const select = document.getElementById(id);
+  select.innerHTML = "<option>Escolha...</option>";
 
-    function nextVideo() {
-      if (videoSelect.selectedIndex < videoSelect.options.length - 1) {
-        videoSelect.selectedIndex++;
-        videoPlayer.src = videoSelect.value;
-        videoPlayer.play();
-      }
-    }
+  items.forEach((item, i) => {
+    const opt = document.createElement("option");
+    opt.value = item;
+    opt.text = item.split("/").pop();
+    select.appendChild(opt);
+  });
+}
 
-    function prevVideo() {
-      if (videoSelect.selectedIndex > 1) {
-        videoSelect.selectedIndex--;
-        videoPlayer.src = videoSelect.value;
-        videoPlayer.play();
-      }
-    }
-  </script>
+// AUDIO
+const audioPlayer = document.getElementById("audioPlayer");
+const audioSelect = document.getElementById("audioSelect");
+
+audioSelect.onchange = () => {
+  audioPlayer.src = audioSelect.value;
+  audioPlayer.play();
+};
+
+function toggleAudio(){
+  audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause();
+}
+
+function nextAudio(){
+  audioSelect.selectedIndex++;
+  audioSelect.onchange();
+}
+
+function prevAudio(){
+  audioSelect.selectedIndex--;
+  audioSelect.onchange();
+}
+
+// VIDEO
+const videoPlayer = document.getElementById("videoPlayer");
+const videoSelect = document.getElementById("videoSelect");
+
+videoSelect.onchange = () => {
+  videoPlayer.src = videoSelect.value;
+  videoPlayer.play();
+};
+
+// YOUTUBE
+const ytSelect = document.getElementById("ytSelect");
+const ytPlayer = document.getElementById("ytPlayer");
+
+ytSelect.onchange = () => {
+  ytPlayer.src = ytSelect.value;
+};
+
+loadCategory("python");
+
+</script>
 
 </body>
 </html>
