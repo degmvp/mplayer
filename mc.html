@@ -10,143 +10,135 @@ body {
   font-family: Arial;
   background: navy;
   color: yellowgreen;
-}
-
-.sidebar {
-  position: fixed;
-  width: 200px;
-  height: 100%;
-  background: black;
-  padding: 15px;
-}
-
-.sidebar h2 {
   text-align:center;
-}
-
-.sidebar button {
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-  background: yellowgreen;
-  border:none;
-  font-weight:bold;
-  cursor:pointer;
 }
 
 .container {
-  margin-left:220px;
-  padding:20px;
-  text-align:center;
+  margin-top:20px;
+}
+
+.topbar img {
+  width:60px;
+  margin:10px;
+  cursor:pointer;
+  transition: transform .2s;
+}
+
+.topbar img:hover {
+  transform: scale(1.1);
 }
 
 select {
-  padding:10px;
-  border-radius:8px;
+  padding:8px;
   margin:10px;
+  font-size:16px;
+  border-radius:8px;
 }
 
-audio, video, iframe {
+audio, video {
   width:80%;
   max-width:700px;
-  margin-top:20px;
-  border-radius:10px;
+  margin-top:15px;
   border:2px solid yellowgreen;
+  border-radius:10px;
 }
 
-.controls button {
+button {
   padding:10px 15px;
   margin:5px;
-  background: yellowgreen;
+  background:yellowgreen;
   border:none;
-  cursor:pointer;
   font-weight:bold;
+  cursor:pointer;
+}
+
+.info {
+  margin-top:10px;
+  font-size:18px;
 }
 </style>
-
 </head>
-<body>
 
-<div class="sidebar">
-  <h2>POLYDEV</h2>
-</div>
+<body>
 
 <div class="container">
 
 <h1>🚀 POLYDEV PLAYER</h1>
 
+<!-- TOP ICONS -->
+<div class="topbar">
+  <a href="https://www.youtube.com" target="_blank">
+    <img src="yt.png" alt="YouTube">
+  </a>
+
+  <a href="https://www.google.com" target="_blank">
+    <img src="google.png" alt="Google">
+  </a>
+</div>
+
+<hr>
+
 <!-- AUDIO -->
 <h2>🎧 Áudio</h2>
-<select id="audioSelect"></select>
-<br>
+
+<select id="audioSelect"></select><br>
 <audio id="audioPlayer" controls></audio>
 
-<div class="controls">
+<div class="info" id="audioInfo">Nenhuma música selecionada</div>
+
+<div>
 <button onclick="prevAudio()">Anterior</button>
-<button onclick="toggleAudio()">Pausa</button>
+<button onclick="toggleAudio()">Play / Pausa</button>
 <button onclick="nextAudio()">Próxima</button>
 </div>
 
-<!-- VIDEO LOCAL -->
-<h2>🎬 Vídeo Local</h2>
-<select id="videoSelect"></select>
-<br>
+<hr>
+
+<!-- VIDEO -->
+<h2>🎬 Vídeo</h2>
+
+<select id="videoSelect"></select><br>
 <video id="videoPlayer" controls></video>
 
-<div class="controls">
-<button onclick="prevVideo()">Anterior</button>
-<button onclick="toggleVideo()">Pausa</button>
-<button onclick="nextVideo()">Próxima</button>
-</div>
+<div class="info" id="videoInfo">Nenhum vídeo selecionado</div>
 
-<!-- YOUTUBE -->
-<h2>🌍 YouTube</h2>
-<select id="ytSelect">
-  <option value="">Escolha um vídeo</option>
-  <option value="https://www.youtube.com/embed/kqtD5dpn9C8">Python Intro</option>
-  <option value="https://www.youtube.com/embed/HXV3zeQKqGY">SQL Intro</option>
-</select>
-<br>
-<iframe id="ytPlayer" height="350" allowfullscreen></iframe>
+<div>
+<button onclick="prevVideo()">Anterior</button>
+<button onclick="toggleVideo()">Play / Pausa</button>
+<button onclick="nextVideo()">Próximo</button>
+</div>
 
 </div>
 
 <script>
+// CONFIG
+const totalAudios = 9;
+const totalVideos = 9;
 
-// ===== GERAR LISTA AUTOMÁTICA =====
-function carregarAudios() {
-  const select = document.getElementById("audioSelect");
-  select.innerHTML = "<option value=''>Escolha uma música</option>";
+let currentAudio = 0;
+let currentVideo = 0;
 
-  for (let i = 1; i <= 9; i++) {
-    let nome = `Y-MP3/ms${i}.mp3`;
-    let opt = document.createElement("option");
-    opt.value = nome;
-    opt.text = `Música ${i}`;
-    select.appendChild(opt);
-  }
-}
-
-function carregarVideos() {
-  const select = document.getElementById("videoSelect");
-  select.innerHTML = "<option value=''>Escolha um vídeo</option>";
-
-  for (let i = 1; i <= 9; i++) {
-    let nome = `Y-MP4/video${i}.mp4`;
-    let opt = document.createElement("option");
-    opt.value = nome;
-    opt.text = `Vídeo ${i}`;
-    select.appendChild(opt);
-  }
-}
-
-// ===== AUDIO =====
-const audioPlayer = document.getElementById("audioPlayer");
+// AUDIO
 const audioSelect = document.getElementById("audioSelect");
+const audioPlayer = document.getElementById("audioPlayer");
+const audioInfo   = document.getElementById("audioInfo");
+
+function loadAudioList() {
+  audioSelect.innerHTML = "<option value=''>Selecione</option>";
+  for (let i = 1; i <= totalAudios; i++) {
+    let opt = document.createElement("option");
+    opt.value = `Y-MP3/ms${i}.mp3`;
+    opt.text  = `Música ${i}`;
+    audioSelect.appendChild(opt);
+  }
+}
 
 audioSelect.onchange = () => {
+  if (!audioSelect.value) return;
+  currentAudio = audioSelect.selectedIndex;
   audioPlayer.src = audioSelect.value;
   audioPlayer.play();
+  audioInfo.innerText = "Tocando: " + audioSelect.value;
 };
 
 function toggleAudio(){
@@ -154,26 +146,42 @@ function toggleAudio(){
 }
 
 function nextAudio(){
-  if (audioSelect.selectedIndex < audioSelect.options.length - 1){
-    audioSelect.selectedIndex++;
+  if (currentAudio < totalAudios) {
+    currentAudio++;
+    audioSelect.selectedIndex = currentAudio;
     audioSelect.onchange();
   }
 }
 
 function prevAudio(){
-  if (audioSelect.selectedIndex > 1){
-    audioSelect.selectedIndex--;
+  if (currentAudio > 1) {
+    currentAudio--;
+    audioSelect.selectedIndex = currentAudio;
     audioSelect.onchange();
   }
 }
 
-// ===== VIDEO =====
-const videoPlayer = document.getElementById("videoPlayer");
+// VIDEO
 const videoSelect = document.getElementById("videoSelect");
+const videoPlayer = document.getElementById("videoPlayer");
+const videoInfo   = document.getElementById("videoInfo");
+
+function loadVideoList() {
+  videoSelect.innerHTML = "<option value=''>Selecione</option>";
+  for (let i = 1; i <= totalVideos; i++) {
+    let opt = document.createElement("option");
+    opt.value = `Y-MP4/video${i}.mp4`;
+    opt.text  = `Vídeo ${i}`;
+    videoSelect.appendChild(opt);
+  }
+}
 
 videoSelect.onchange = () => {
+  if (!videoSelect.value) return;
+  currentVideo = videoSelect.selectedIndex;
   videoPlayer.src = videoSelect.value;
   videoPlayer.play();
+  videoInfo.innerText = "Reproduzindo: " + videoSelect.value;
 };
 
 function toggleVideo(){
@@ -181,31 +189,24 @@ function toggleVideo(){
 }
 
 function nextVideo(){
-  if (videoSelect.selectedIndex < videoSelect.options.length - 1){
-    videoSelect.selectedIndex++;
+  if (currentVideo < totalVideos) {
+    currentVideo++;
+    videoSelect.selectedIndex = currentVideo;
     videoSelect.onchange();
   }
 }
 
 function prevVideo(){
-  if (videoSelect.selectedIndex > 1){
-    videoSelect.selectedIndex--;
+  if (currentVideo > 1) {
+    currentVideo--;
+    videoSelect.selectedIndex = currentVideo;
     videoSelect.onchange();
   }
 }
 
-// ===== YOUTUBE =====
-const ytSelect = document.getElementById("ytSelect");
-const ytPlayer = document.getElementById("ytPlayer");
-
-ytSelect.onchange = () => {
-  ytPlayer.src = ytSelect.value;
-};
-
 // INIT
-carregarAudios();
-carregarVideos();
-
+loadAudioList();
+loadVideoList();
 </script>
 
 </body>
