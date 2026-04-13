@@ -55,11 +55,12 @@ audio, video, iframe {
 }
 
 .controls button {
-  padding:10px;
+  padding:10px 15px;
   margin:5px;
   background: yellowgreen;
   border:none;
   cursor:pointer;
+  font-weight:bold;
 }
 </style>
 
@@ -68,10 +69,6 @@ audio, video, iframe {
 
 <div class="sidebar">
   <h2>POLYDEV</h2>
-
-  <button onclick="loadCategory('python')">🐍 Python</button>
-  <button onclick="loadCategory('sql')">🗄️ SQL</button>
-  <button onclick="loadCategory('media')">🎧 Media</button>
 </div>
 
 <div class="container">
@@ -85,9 +82,9 @@ audio, video, iframe {
 <audio id="audioPlayer" controls></audio>
 
 <div class="controls">
-<button onclick="prevAudio()">⏮️</button>
-<button onclick="toggleAudio()">⏯️</button>
-<button onclick="nextAudio()">⏭️</button>
+<button onclick="prevAudio()">Anterior</button>
+<button onclick="toggleAudio()">Pausa</button>
+<button onclick="nextAudio()">Próxima</button>
 </div>
 
 <!-- VIDEO LOCAL -->
@@ -96,9 +93,19 @@ audio, video, iframe {
 <br>
 <video id="videoPlayer" controls></video>
 
+<div class="controls">
+<button onclick="prevVideo()">Anterior</button>
+<button onclick="toggleVideo()">Pausa</button>
+<button onclick="nextVideo()">Próxima</button>
+</div>
+
 <!-- YOUTUBE -->
 <h2>🌍 YouTube</h2>
-<select id="ytSelect"></select>
+<select id="ytSelect">
+  <option value="">Escolha um vídeo</option>
+  <option value="https://www.youtube.com/embed/kqtD5dpn9C8">Python Intro</option>
+  <option value="https://www.youtube.com/embed/HXV3zeQKqGY">SQL Intro</option>
+</select>
 <br>
 <iframe id="ytPlayer" height="350" allowfullscreen></iframe>
 
@@ -106,43 +113,34 @@ audio, video, iframe {
 
 <script>
 
-const data = {
-  python: {
-    audio: ["Y-MP3/ms1.mp3","Y-MP3/ms2.mp3"],
-    video: ["Y-MP4/video1.mp4"],
-    yt: ["https://www.youtube.com/embed/kqtD5dpn9C8"]
-  },
-  sql: {
-    audio: ["Y-MP3/ms3.mp3"],
-    video: ["Y-MP4/video2.mp4"],
-    yt: ["https://www.youtube.com/embed/HXV3zeQKqGY"]
-  },
-  media: {
-    audio: ["Y-MP3/ms4.mp3"],
-    video: ["Y-MP4/video3.mp4"],
-    yt: ["https://www.youtube.com/embed/dQw4w9WgXcQ"]
-  }
-};
+// ===== GERAR LISTA AUTOMÁTICA =====
+function carregarAudios() {
+  const select = document.getElementById("audioSelect");
+  select.innerHTML = "<option value=''>Escolha uma música</option>";
 
-function loadCategory(cat) {
-  loadSelect("audioSelect", data[cat].audio);
-  loadSelect("videoSelect", data[cat].video);
-  loadSelect("ytSelect", data[cat].yt);
-}
-
-function loadSelect(id, items) {
-  const select = document.getElementById(id);
-  select.innerHTML = "<option>Escolha...</option>";
-
-  items.forEach((item, i) => {
-    const opt = document.createElement("option");
-    opt.value = item;
-    opt.text = item.split("/").pop();
+  for (let i = 1; i <= 9; i++) {
+    let nome = `Y-MP3/ms${i}.mp3`;
+    let opt = document.createElement("option");
+    opt.value = nome;
+    opt.text = `Música ${i}`;
     select.appendChild(opt);
-  });
+  }
 }
 
-// AUDIO
+function carregarVideos() {
+  const select = document.getElementById("videoSelect");
+  select.innerHTML = "<option value=''>Escolha um vídeo</option>";
+
+  for (let i = 1; i <= 9; i++) {
+    let nome = `Y-MP4/video${i}.mp4`;
+    let opt = document.createElement("option");
+    opt.value = nome;
+    opt.text = `Vídeo ${i}`;
+    select.appendChild(opt);
+  }
+}
+
+// ===== AUDIO =====
 const audioPlayer = document.getElementById("audioPlayer");
 const audioSelect = document.getElementById("audioSelect");
 
@@ -156,16 +154,20 @@ function toggleAudio(){
 }
 
 function nextAudio(){
-  audioSelect.selectedIndex++;
-  audioSelect.onchange();
+  if (audioSelect.selectedIndex < audioSelect.options.length - 1){
+    audioSelect.selectedIndex++;
+    audioSelect.onchange();
+  }
 }
 
 function prevAudio(){
-  audioSelect.selectedIndex--;
-  audioSelect.onchange();
+  if (audioSelect.selectedIndex > 1){
+    audioSelect.selectedIndex--;
+    audioSelect.onchange();
+  }
 }
 
-// VIDEO
+// ===== VIDEO =====
 const videoPlayer = document.getElementById("videoPlayer");
 const videoSelect = document.getElementById("videoSelect");
 
@@ -174,7 +176,25 @@ videoSelect.onchange = () => {
   videoPlayer.play();
 };
 
-// YOUTUBE
+function toggleVideo(){
+  videoPlayer.paused ? videoPlayer.play() : videoPlayer.pause();
+}
+
+function nextVideo(){
+  if (videoSelect.selectedIndex < videoSelect.options.length - 1){
+    videoSelect.selectedIndex++;
+    videoSelect.onchange();
+  }
+}
+
+function prevVideo(){
+  if (videoSelect.selectedIndex > 1){
+    videoSelect.selectedIndex--;
+    videoSelect.onchange();
+  }
+}
+
+// ===== YOUTUBE =====
 const ytSelect = document.getElementById("ytSelect");
 const ytPlayer = document.getElementById("ytPlayer");
 
@@ -182,7 +202,9 @@ ytSelect.onchange = () => {
   ytPlayer.src = ytSelect.value;
 };
 
-loadCategory("python");
+// INIT
+carregarAudios();
+carregarVideos();
 
 </script>
 
