@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>POLYDEV PLAYER</title>
+<title>POLYDEV PLAYER AUTO</title>
 
 <style>
 body {
@@ -21,11 +21,6 @@ body {
   width:60px;
   margin:10px;
   cursor:pointer;
-  transition: transform .2s;
-}
-
-.topbar img:hover {
-  transform: scale(1.1);
 }
 
 select {
@@ -65,14 +60,14 @@ button {
 
 <h1>🚀 POLYDEV PLAYER</h1>
 
-<!-- TOP ICONS -->
+<!-- LINKS -->
 <div class="topbar">
   <a href="https://www.youtube.com" target="_blank">
-    <img src="yt.png" alt="YouTube">
+    <img src="yt.png">
   </a>
 
   <a href="https://www.google.com" target="_blank">
-    <img src="google.png" alt="Google">
+    <img src="google.png">
   </a>
 </div>
 
@@ -84,11 +79,11 @@ button {
 <select id="audioSelect"></select><br>
 <audio id="audioPlayer" controls></audio>
 
-<div class="info" id="audioInfo">Nenhuma música selecionada</div>
+<div class="info" id="audioInfo">Modo automático ativado</div>
 
 <div>
 <button onclick="prevAudio()">Anterior</button>
-<button onclick="toggleAudio()">Play / Pausa</button>
+<button onclick="toggleAudio()">Pausa</button>
 <button onclick="nextAudio()">Próxima</button>
 </div>
 
@@ -100,11 +95,11 @@ button {
 <select id="videoSelect"></select><br>
 <video id="videoPlayer" controls></video>
 
-<div class="info" id="videoInfo">Nenhum vídeo selecionado</div>
+<div class="info" id="videoInfo">Modo automático ativado</div>
 
 <div>
 <button onclick="prevVideo()">Anterior</button>
-<button onclick="toggleVideo()">Play / Pausa</button>
+<button onclick="toggleVideo()">Pausa</button>
 <button onclick="nextVideo()">Próximo</button>
 </div>
 
@@ -112,97 +107,110 @@ button {
 
 <script>
 // CONFIG
-const totalAudios = 9;
-const totalVideos = 10;
+const totalAudios = 99;
+const totalVideos = 99;
 
-let currentAudio = 0;
-let currentVideo = 0;
+let currentAudio = 1;
+let currentVideo = 1;
 
-// AUDIO
+// ELEMENTOS
 const audioSelect = document.getElementById("audioSelect");
 const audioPlayer = document.getElementById("audioPlayer");
-const audioInfo   = document.getElementById("audioInfo");
+const audioInfo = document.getElementById("audioInfo");
 
+const videoSelect = document.getElementById("videoSelect");
+const videoPlayer = document.getElementById("videoPlayer");
+const videoInfo = document.getElementById("videoInfo");
+
+// ================= AUDIO =================
 function loadAudioList() {
-  audioSelect.innerHTML = "<option value=''>Selecione</option>";
+  audioSelect.innerHTML = "";
   for (let i = 1; i <= totalAudios; i++) {
-    let opt = document.createElement("option");
+    const opt = document.createElement("option");
     opt.value = `Y-MP3/ms${i}.mp3`;
     opt.text  = `Música ${i}`;
     audioSelect.appendChild(opt);
   }
 }
 
-audioSelect.onchange = () => {
-  if (!audioSelect.value) return;
-  currentAudio = audioSelect.selectedIndex;
-  audioPlayer.src = audioSelect.value;
-  audioPlayer.play();
-  audioInfo.innerText = "Tocando: " + audioSelect.value;
-};
+// AUTO START
+audioSelect.addEventListener("focus", () => {
+  startAudio(1);
+});
 
-function toggleAudio(){
-  audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause();
+function startAudio(index) {
+  currentAudio = index;
+  audioSelect.selectedIndex = index - 1;
+  audioPlayer.src = `Y-MP3/ms${index}.mp3`;
+  audioPlayer.play();
+  audioInfo.innerText = "Tocando: ms" + index + ".mp3";
 }
 
 function nextAudio(){
   if (currentAudio < totalAudios) {
-    currentAudio++;
-    audioSelect.selectedIndex = currentAudio;
-    audioSelect.onchange();
+    startAudio(++currentAudio);
   }
 }
 
 function prevAudio(){
   if (currentAudio > 1) {
-    currentAudio--;
-    audioSelect.selectedIndex = currentAudio;
-    audioSelect.onchange();
+    startAudio(--currentAudio);
   }
 }
 
-// VIDEO
-const videoSelect = document.getElementById("videoSelect");
-const videoPlayer = document.getElementById("videoPlayer");
-const videoInfo   = document.getElementById("videoInfo");
+function toggleAudio(){
+  audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause();
+}
 
+// AUTO NEXT
+audioPlayer.onended = () => {
+  nextAudio();
+};
+
+// ================= VIDEO =================
 function loadVideoList() {
-  videoSelect.innerHTML = "<option value=''>Selecione</option>";
+  videoSelect.innerHTML = "";
   for (let i = 1; i <= totalVideos; i++) {
-    let opt = document.createElement("option");
+    const opt = document.createElement("option");
     opt.value = `Y-MP4/video${i}.mp4`;
     opt.text  = `Vídeo ${i}`;
     videoSelect.appendChild(opt);
   }
 }
 
-videoSelect.onchange = () => {
-  if (!videoSelect.value) return;
-  currentVideo = videoSelect.selectedIndex;
-  videoPlayer.src = videoSelect.value;
-  videoPlayer.play();
-  videoInfo.innerText = "Reproduzindo: " + videoSelect.value;
-};
+// AUTO START
+videoSelect.addEventListener("focus", () => {
+  startVideo(1);
+});
 
-function toggleVideo(){
-  videoPlayer.paused ? videoPlayer.play() : videoPlayer.pause();
+function startVideo(index) {
+  currentVideo = index;
+  videoSelect.selectedIndex = index - 1;
+  videoPlayer.src = `Y-MP4/video${index}.mp4`;
+  videoPlayer.play();
+  videoInfo.innerText = "Reproduzindo: video" + index + ".mp4";
 }
 
 function nextVideo(){
   if (currentVideo < totalVideos) {
-    currentVideo++;
-    videoSelect.selectedIndex = currentVideo;
-    videoSelect.onchange();
+    startVideo(++currentVideo);
   }
 }
 
 function prevVideo(){
   if (currentVideo > 1) {
-    currentVideo--;
-    videoSelect.selectedIndex = currentVideo;
-    videoSelect.onchange();
+    startVideo(--currentVideo);
   }
 }
+
+function toggleVideo(){
+  videoPlayer.paused ? videoPlayer.play() : videoPlayer.pause();
+}
+
+// AUTO NEXT
+videoPlayer.onended = () => {
+  nextVideo();
+};
 
 // INIT
 loadAudioList();
